@@ -1,7 +1,7 @@
 local M = {}
 local util = require("yoru.util")
 
-vim.api.nvim_create_autocmd({ "User" }, {
+vim.api.nvim_create_autocmd({ "UserYoru" }, {
     pattern = { "yoru" },
     group = vim.api.nvim_create_augroup("yoru", { clear = true }),
     callback = function()
@@ -56,7 +56,7 @@ function M.setup(opts)
     if vim.fn.has("lualine") == 1 then
         require("lualine").setup({ options = { theme = require("yoru.lualine") } })
     end
-    vim.cmd("doautocmd User yoru")
+    vim.cmd("doautocmd UserYoru yoru")
 end
 
 return M

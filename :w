@@ -1,81 +1,62 @@
 local M = {}
+local util = require("yoru.util")
 
-function M.merge_tbl(tbl1, tbl2)
-    return vim.tbl_deep_extend("force", tbl1, tbl2)
-end
-
-function M.get_hls(transparent)
-    local colors = M.get_colors()
-    local highlights = {}
-    local integrations = require("integrations")
-
-    if transparent then
-        table.insert(integrations, "glassy")
+vim.api.nvim_create_autocmd({ "UserYoru" }, {
+    pattern = { "yoru" },
+    group = vim.api.nvim_create_augroup("yoru", { clear = true }),
+    callback = function()
+        if vim.fn.has("lualine") == 1 then
+            require("lualine").setup({ options = { theme = require("yoru.lualine") } })
+        end
+        vim.api.nvim_create_autocmd({ "ColorSchemePre" }, {
+            pattern = { "*" },
+            once = true,
+            callback = function()
+                vim.api.nvim_command 'highlight clear'
+                if vim.fn.has("lualine") == 1 then
+                    require('lualine').setup({ options = { theme = "auto" } })
+                end
+            end
+        })
     end
+})
 
-    for _, integration_module in ipairs(integrations) do
-        local hls = require("integrations." .. integration_module)(colors)
-        highlights = M.merge_tbl(highlights, hls)
-    end
 
-    return highlights
-end
 
-function M.set_hls()
-    local colors = M.get_colors()
-    vim.g.terminal_color_0 = "#" .. colors.base00
-    vim.g.terminal_color_1 = "#" .. colors.base08
-    vim.g.terminal_color_2 = "#" .. colors.base0B
-    vim.g.terminal_color_3 = "#" .. colors.base0A
-    vim.g.terminal_color_4 = "#" .. colors.base0D
-    vim.g.terminal_color_5 = "#" .. colors.base0E
-    vim.g.terminal_color_6 = "#" .. colors.base0C
-    vim.g.terminal_color_7 = "#" .. colors.base05
-    vim.g.terminal_color_8 = "#" .. colors.base03
-    vim.g.terminal_color_9 = "#" .. colors.base08
-    vim.g.terminal_color_10 = "#" .. colors.base0B
-    vim.g.terminal_color_11 = "#" .. colors.base0A
-    vim.g.terminal_color_12 = "#" .. colors.base0D
-    vim.g.terminal_color_13 = "#" .. colors.base0E
-    vim.g.terminal_color_14 = "#" .. colors.base0C
-    vim.g.terminal_color_15 = "#" .. colors.base07
-end
+function M.setup(opts)
+    local config = {
+        transparency = false,
+    }
 
-function M.get_colors()
-    local path = "yoru.colors"
-    local present, theme = pcall(require, path)
+    config = util.merge_tbl(config, opts)
 
-    if not present then
-        error("`" .. path .. "`" .. " is not an available theme", 2)
+    local colors = util.get_colors()
+    if not colors then
         return
     end
 
-    local output = M.merge_tbl(theme.base_16, theme.custom)
-    return output
-end
+    -- term hls
+    util.set_hls()
 
-function M.get_polish()
-    local path = "radium.colors"
-    local present, theme = pcall(require, path)
+    -- get hls
+    local hls = util.get_hls(config.transparency)
 
-    if not present then
-        error("`" .. path .. "`" .. " is not available!", 2)
-        return
+    -- actually highlight stuff
+    for hl, col in pairs(hls) do
+        vim.api.nvim_set_hl(0, hl, col)
     end
 
-    return theme.polish_hl
-end
-
-function M.get_dir_modules(dir_path)
-    local dir_contents = require("plenary.scandir").scan_dir(dir_path, {})
-
-    local modules = {}
-    for _, content in ipairs(dir_contents) do
-        local module = vim.fn.fnamemodify(vim.fn.fnamemodify(content, ":t"), ":r")
-        table.insert(modules, module)
+    local polish = util.get_polish()
+    if polish ~= nil then
+        for hl, col in pairs(polish) do
+            vim.api.nvim_set_hl(0, hl, col)
+        end
     end
-
-    return modules
+    vim.g.colors_name = "yoru"
+    if vim.fn.has("lualine") == 1 then
+        require("lualine").setup({ options = { theme = require("yoru.lualine") } })
+    end
+    vim.cmd("doautocmd UserYoru yoru")
 end
 
 return M
