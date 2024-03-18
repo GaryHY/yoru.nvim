@@ -23,29 +23,29 @@ end
 
 function M.set_hls()
     local colors = M.get_colors()
-    vim.g.terminal_color_0 = "#" .. colors.base00
-    vim.g.terminal_color_1 = "#" .. colors.base08
-    vim.g.terminal_color_2 = "#" .. colors.base0B
-    vim.g.terminal_color_3 = "#" .. colors.base0A
-    vim.g.terminal_color_4 = "#" .. colors.base0D
-    vim.g.terminal_color_5 = "#" .. colors.base0E
-    vim.g.terminal_color_6 = "#" .. colors.base0C
-    vim.g.terminal_color_7 = "#" .. colors.base05
-    vim.g.terminal_color_8 = "#" .. colors.base03
-    vim.g.terminal_color_9 = "#" .. colors.base08
-    vim.g.terminal_color_10 = "#" .. colors.base0B
-    vim.g.terminal_color_11 = "#" .. colors.base0A
-    vim.g.terminal_color_12 = "#" .. colors.base0D
-    vim.g.terminal_color_13 = "#" .. colors.base0E
-    vim.g.terminal_color_14 = "#" .. colors.base0C
-    vim.g.terminal_color_15 = "#" .. colors.base07
+    if colors ~= nil then
+        vim.g.terminal_color_0 = "#" .. colors.base00
+        vim.g.terminal_color_1 = "#" .. colors.base08
+        vim.g.terminal_color_2 = "#" .. colors.base0B
+        vim.g.terminal_color_3 = "#" .. colors.base0A
+        vim.g.terminal_color_4 = "#" .. colors.base0D
+        vim.g.terminal_color_5 = "#" .. colors.base0E
+        vim.g.terminal_color_6 = "#" .. colors.base0C
+        vim.g.terminal_color_7 = "#" .. colors.base05
+        vim.g.terminal_color_8 = "#" .. colors.base03
+        vim.g.terminal_color_9 = "#" .. colors.base08
+        vim.g.terminal_color_10 = "#" .. colors.base0B
+        vim.g.terminal_color_11 = "#" .. colors.base0A
+        vim.g.terminal_color_12 = "#" .. colors.base0D
+        vim.g.terminal_color_13 = "#" .. colors.base0E
+        vim.g.terminal_color_14 = "#" .. colors.base0C
+        vim.g.terminal_color_15 = "#" .. colors.base07
+    end
 end
 
 function M.get_colors()
     local path = "yoru.colors"
     local present, theme = pcall(require, path)
-    -- P(present)
-    -- P(theme)
 
     if not present then
         error("`" .. path .. "`" .. " is not an available theme", 2)
@@ -55,8 +55,6 @@ function M.get_colors()
     local output = M.merge_tbl(theme.base_16, theme.custom)
     return output
 end
-
--- P(M.get_colors())
 
 function M.get_polish()
     local path = "yoru.colors"

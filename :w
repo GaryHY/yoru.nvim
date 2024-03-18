@@ -55,7 +55,7 @@ function M.get_colors()
 end
 
 function M.get_polish()
-    local path = "radium.colors"
+    local path = "yoru.colors"
     local present, theme = pcall(require, path)
 
     if not present then

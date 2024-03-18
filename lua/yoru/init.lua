@@ -22,7 +22,6 @@ vim.api.nvim_create_autocmd({ "User" }, {
 })
 
 
-
 function M.setup(opts)
     local config = {
         transparency = false,
