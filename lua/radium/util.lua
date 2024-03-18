@@ -57,6 +57,8 @@ function M.get_colors()
 end
 
 -- P(M.get_colors())
+P(require("integrations"))
+-- P(require("testpath"))
 
 function M.get_polish()
     local path = "yoru.colors"
