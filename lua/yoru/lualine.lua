@@ -1,4 +1,4 @@
-local util = require("radium.util")
+local util = require("yoru.util")
 local colors = util.get_colors()
 
 local M = {}

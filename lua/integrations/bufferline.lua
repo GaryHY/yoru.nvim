@@ -1,11 +1,7 @@
 return function(colors)
     return {
         BufferLineBackground = {
-            fg = colors.grey_fg,
-            bg = colors.black2,
-        },
-
-        -- buffers
+            fg = colors.grey_fg, bg = colors.black2, }, -- buffers
         BufferLineBufferSelected = {
             fg = colors.white,
             bg = colors.black,

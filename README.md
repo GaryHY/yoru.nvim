@@ -1,4 +1,4 @@
-Radium comes to neovim!
+yoru comes to neovim!
 
 For a better experience use semantic highlighting.
 
